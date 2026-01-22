@@ -26,6 +26,7 @@
       max-width: 340px;
       box-shadow: 0 10px 30px rgba(76, 29, 149, 0.25);
       z-index: 2;
+      position: relative;
     }
 
     h1 {
@@ -85,10 +86,18 @@
       font-size: 20px;
       cursor: pointer;
     }
+
+    /* Card image */
+    .card img {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
 
+  <!-- Tap to start screen -->
   <div id="startScreen" onclick="startExperience()">
     Tap anywhere 💜
   </div>
@@ -98,7 +107,9 @@
     <source src="blue.mp3" type="audio/mpeg">
   </audio>
 
-  <div class="card">
+  <!-- Main card -->
+  <div class="card" id="card">
+    <img src="cutepic.jpg" alt="Zee & Me" id="cardImage">
     <h1>Zee 💜</h1>
     <p id="typing"></p>
     <p>Will you be my Valentine, Babe?</p>
@@ -122,40 +133,4 @@
       document.getElementById("startScreen").style.display = "none";
       document.getElementById("music").play();
       typeText();
-      createHearts();
-    }
-
-    function yesClick() {
-      document.body.innerHTML = `
-        <h1 style="color:white; font-size:38px;">YAYYY 💜</h1>
-        <p style="color:white; font-size:20px;">
-          Happy Valentine’s Day, Zee.<br>
-          I choose you. Always.
-        </p>
-      `;
-    }
-
-    function moveNo() {
-      const no = document.getElementById("no");
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-      no.style.left = x + "px";
-      no.style.top = y + "px";
-    }
-
-    function createHearts() {
-      setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.textContent = "💜";
-        heart.style.left = Math.random() * 100 + "vw";
-        heart.style.fontSize = (Math.random() * 10 + 15) + "px";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 6000);
-      }, 400);
-    }
-  </script>
-
-</body>
-</html>
-
+      crea
