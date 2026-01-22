@@ -99,7 +99,7 @@
 
   <!-- Tap to start screen -->
   <div id="startScreen" onclick="startExperience()">
-    Tap anywhere love💜
+    Tap anywhere love 💜
   </div>
 
   <!-- Background music -->
@@ -118,7 +118,7 @@
   </div>
 
   <script>
-    const text = "No matter the distance, you’re always my favorite person :3";
+    const text = "No matter the distance, you’re always my favorite person.";
     let index = 0;
 
     function typeText() {
@@ -151,22 +151,25 @@
 
       // Add new message
       const h1 = document.createElement('h1');
-      h1.style.color = 'white';
+      h1.style.color = '#7c3aed'; // darker purple for visibility
+      h1.style.textShadow = '2px 2px 5px rgba(0,0,0,0.3)'; // optional shadow
       h1.style.fontSize = '38px';
       h1.textContent = 'YAYYY :D 💜';
       card.appendChild(h1);
 
       const p = document.createElement('p');
-      p.style.color = 'white';
+      p.style.color = '#4c1d95'; // darker purple
+      p.style.textShadow = '1px 1px 3px rgba(0,0,0,0.3)';
       p.style.fontSize = '20px';
-      p.innerHTML = 'Happy Valentine’s Day, Zee.<br>I choose you. Always.';
+      p.innerHTML = 'Happy Valentine’s Day, Zee.<br>I choose you. Always :3';
       card.appendChild(p);
     }
 
     function moveNo() {
       const no = document.getElementById("no");
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
+      const padding = 20; // distance from edges
+      const x = Math.random() * (window.innerWidth - no.offsetWidth - padding*2) + padding;
+      const y = Math.random() * (window.innerHeight - no.offsetHeight - padding*2) + padding;
       no.style.left = x + "px";
       no.style.top = y + "px";
     }
@@ -175,7 +178,7 @@
       setInterval(() => {
         const heart = document.createElement("div");
         heart.className = "heart";
-        heart.textContent = "💜"; // or use '<img src="tinyheart.png" width="20px">' for image hearts
+        heart.textContent = "💜"; // or '<img src="tinyheart.png" width="20px">'
         heart.style.left = Math.random() * 100 + "vw";
         heart.style.fontSize = (Math.random() * 10 + 15) + "px";
         document.body.appendChild(heart);
