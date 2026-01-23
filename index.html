@@ -83,44 +83,54 @@ button:active {
   cursor: pointer;
 }
 
-/* ENVELOPE */
-.envelope {
+/* ENVELOPE CONTAINER */
+.envelope-container {
+  perspective: 800px;
   width: 260px;
   height: 160px;
-  background: #f8fafc;
-  position: relative;
   margin: auto;
-  border-radius: 6px;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+  position: relative;
 }
 
-.envelope::before {
-  content: "";
+/* ENVELOPE BODY */
+.envelope {
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0,0,0,.25);
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease;
+}
+
+/* ENVELOPE FLAP */
+.flap {
+  width: 100%;
+  height: 50%;
+  background: #e5e7eb;
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(135deg, transparent 50%, #e5e7eb 50%);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   transform-origin: top;
-  transition: transform .8s ease;
+  transition: transform 0.6s ease;
+  z-index: 2;
 }
 
-.envelope.open::before {
-  transform: rotateX(180deg);
-}
-
+/* PAPER */
 .paper {
   position: absolute;
   width: 90%;
   left: 5%;
-  top: 10px;
+  top: 50%;
   background: #fff8dc;
   padding: 15px;
   border-radius: 6px;
-  transform: translateY(80px);
-  transition: transform 1s ease;
+  transform: translateY(100px);
+  transition: transform 0.8s ease 0.3s; /* delay so flap opens first */
   box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
   font-family: 'Patrick Hand', cursive;
 }
@@ -133,10 +143,6 @@ button:active {
   right: 5px;
   font-size: 14px;
   opacity: 0.3;
-}
-
-.envelope.open .paper {
-  transform: translateY(-120px);
 }
 
 .paper h3 {
@@ -168,7 +174,6 @@ button:active {
   <source src="blue.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Flap sound effect -->
 <audio id="flapSound">
   <source src="flap.mp3" type="audio/mpeg">
 </audio>
@@ -215,23 +220,31 @@ function yesClick() {
 function openEnvelope() {
   const card = document.getElementById("card");
   card.innerHTML = `
-    <div class="envelope" onclick="toggleEnvelope(this)">
-      <div class="paper">
-        <h3>To my person</h3>
-        <p>
-        Hey love, I just wanted to tell you how much you mean to me. Even though we’re miles apart, I feel you with me every day in my thoughts and my heart. Every little thing about you, your voice, your laugh, the way you care, makes me fall for you more and more. I miss you like crazy, and I can’t wait for the day we’re finally together. Until then, just know that no distance can ever change how much I love you. Maybe someday soon, I'll be on a plane, flying through the sky, not just to visit, but to find you, hold you, and finally do the things that we've been dreaming for.. I love you 💖
-        </p>
+    <div class="envelope-container" onclick="toggleEnvelope(this)">
+      <div class="envelope">
+        <div class="flap"></div>
+        <div class="paper">
+          <h3>To my person</h3>
+          <p>
+          Hey love, I just wanted to tell you how much you mean to me. Even though we’re miles apart, I feel you with me every day in my thoughts and my heart. Every little thing about you, your voice, your laugh, the way you care, makes me fall for you more and more. I miss you like crazy, and I can’t wait for the day we’re finally together. Until then, just know that no distance can ever change how much I love you. Maybe someday soon, I'll be on a plane, flying through the sky, not just to visit, but to find you, hold you, and finally do the things that we've been dreaming for.. I love you 💖
+          </p>
+        </div>
       </div>
     </div>
     <p style="margin-top:15px;font-size:14px;">(tap the envelope)</p>
   `;
 }
 
-function toggleEnvelope(el) {
-  el.classList.toggle('open');
-  const flap = document.getElementById('flapSound');
-  flap.currentTime = 0;
-  flap.play();
+function toggleEnvelope(container) {
+  const flap = container.querySelector('.flap');
+  const paper = container.querySelector('.paper');
+  flap.style.transform = flap.style.transform === 'rotateX(-180deg)' ? 'rotateX(0deg)' : 'rotateX(-180deg)';
+  paper.style.transform = paper.style.transform === 'translateY(0px)' ? 'translateY(100px)' : 'translateY(0px)';
+  
+  // Play flap sound
+  const sound = document.getElementById('flapSound');
+  sound.currentTime = 0;
+  sound.play();
 }
 
 function moveNo() {
