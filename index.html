@@ -68,78 +68,51 @@ button:active { transform: scale(0.95);}
   cursor: pointer;
 }
 
-/* ENVELOPE */
-.envelope-container {
-  position: relative;
+/* FLIPBOOK */
+.flipbook-container {
+  perspective: 1000px;
   width: 100%;
-  max-width: 280px;
+  max-width: 350px;
   margin: 1em auto;
+}
+
+.flipbook {
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s ease;
   cursor: pointer;
 }
 
-.envelope {
-  position: relative;
+.flipbook-page {
   width: 100%;
-  height: 180px;
-  perspective: 600px;
-}
-
-.envelope .flap {
-  width: 100%;
-  height: 90px;
-  background: #d8d8d8;
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-top-left-radius: 0.5em;
-  border-top-right-radius: 0.5em;
-  transform-origin: top center;
-  transition: transform 0.5s ease;
-  z-index: 3;
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  box-shadow: 0 0.2em 0.5em rgba(0,0,0,0.2);
-}
-
-.envelope .paper {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 180px;
-  padding: 1em;
-  box-sizing: border-box;
   background: #fff8dc;
-  border-radius: 0.5em;
+  border-radius: 1em;
+  padding: 2em;
+  box-sizing: border-box;
   font-family: 'Patrick Hand', cursive;
   font-size: 1rem;
-  z-index: 2;
-  transform: translateY(0);
-  transition: transform 0.6s ease;
-  overflow: hidden;
+  backface-visibility: hidden;
+  box-shadow: 0 0.5em 1em rgba(0,0,0,0.2);
+  position: relative;
 }
 
-.envelope .paper::after {
+/* Kiss marks */
+.flipbook-page::before {
   content: "💋 💋 💋";
   position: absolute;
-  bottom: 0.2em;
-  right: 0.2em;
-  font-size: 0.9rem;
+  bottom: 0.3em;
+  right: 0.3em;
+  font-size: 1rem;
   opacity: 0.3;
 }
 
-.envelope .paper h3 { margin-top:0; color:#7c3aed; }
-
-/* envelope base */
-.envelope .base {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  height: 90px;
-  background: #e5e7eb;
-  border-radius: 0 0 0.5em 0.5em;
-  z-index:1;
+.flipbook .back {
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: #7c3aed;
 }
 </style>
 </head>
@@ -151,7 +124,7 @@ button:active { transform: scale(0.95);}
   <source src="blue.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="flapSound">
+<audio id="flipSound">
   <source src="flap.mp3" type="audio/mpeg">
 </audio>
 
@@ -190,46 +163,35 @@ function yesClick() {
     <p>Happy Valentine’s Day, Zee.<br>I choose you. Always :3</p>
     <button id="oneMoreBtn">One more thing… 💌</button>
   `;
-  document.getElementById("oneMoreBtn").addEventListener("click", showEnvelope);
+  document.getElementById("oneMoreBtn").addEventListener("click", showFlipbook);
 }
 
-function showEnvelope() {
+function showFlipbook() {
   const card = document.getElementById("card");
   card.innerHTML = `
-    <div class="envelope-container" onclick="toggleEnvelope(this)">
-      <div class="envelope">
-        <div class="paper">
+    <div class="flipbook-container">
+      <div class="flipbook" id="flipbook">
+        <div class="flipbook-page front">
           <h3>To my person</h3>
           <p>
           Hey love, I just wanted to tell you how much you mean to me. Even though we’re miles apart, I feel you with me every day in my thoughts and my heart. Every little thing about you, your voice, your laugh, the way you care, makes me fall for you more and more. I miss you like crazy, and I can’t wait for the day we’re finally together. Until then, just know that no distance can ever change how much I love you. Maybe someday soon, I'll be on a plane, flying through the sky, not just to visit, but to find you, hold you, and finally do the things that we've been dreaming for.. I love you 💖
           </p>
         </div>
-        <div class="flap"></div>
-        <div class="base"></div>
+        <div class="flipbook-page back">
+          <h3>💜</h3>
+          <p>Click again to close 💌</p>
+        </div>
       </div>
     </div>
-    <p style="margin-top:0.5em;font-size:0.9rem;">(tap the envelope)</p>
+    <p style="margin-top:0.5em;font-size:0.9rem;">(tap the page to flip)</p>
   `;
-}
 
-function toggleEnvelope(container){
-  const flap = container.querySelector('.flap');
-  const paper = container.querySelector('.paper');
-  const isOpen = flap.dataset.open === 'true';
-
-  if(!isOpen){
-    flap.style.transform = 'translateY(-90px)';
-    paper.style.transform = 'translateY(-90px)';
-    flap.dataset.open = 'true';
-  } else {
-    flap.style.transform = 'translateY(0)';
-    paper.style.transform = 'translateY(0)';
-    flap.dataset.open = 'false';
-  }
-
-  const sound = document.getElementById('flapSound');
-  sound.currentTime = 0;
-  sound.play();
+  const flipbook = document.getElementById("flipbook");
+  flipbook.addEventListener("click", () => {
+    flipbook.style.transform = flipbook.style.transform === "rotateY(180deg)" ? "rotateY(0deg)" : "rotateY(180deg)";
+    document.getElementById("flipSound").currentTime = 0;
+    document.getElementById("flipSound").play();
+  });
 }
 
 function moveNo(){
