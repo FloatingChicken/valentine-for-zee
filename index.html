@@ -21,6 +21,7 @@ body {
   overflow-x: hidden;
 }
 
+/* CARD */
 .card {
   background: #faf5ff;
   padding: 2em;
@@ -67,55 +68,62 @@ button:active { transform: scale(0.95);}
   cursor: pointer;
 }
 
-/* ENVELOPE */
+/* ENVELOPE STYLING */
 .envelope-container {
+  position: relative;
   width: 100%;
   max-width: 280px;
   margin: 1em auto;
-  position: relative;
-}
-
-.envelope {
-  width: 100%;
-  height: 180px;
-  position: relative;
   cursor: pointer;
-  perspective: 600px;
 }
 
-.flap {
+/* Envelope base */
+.envelope-base {
   width: 100%;
-  height: 90px;
+  height: 150px;
   background: #e5e7eb;
+  border-radius: 0.5em;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0.3em 0.8em rgba(0,0,0,0.2);
+}
+
+/* Flap */
+.envelope-flap {
+  width: 100%;
+  height: 75px;
+  background: #d8d8d8;
   position: absolute;
   top: 0;
   left: 0;
   border-top-left-radius: 0.5em;
   border-top-right-radius: 0.5em;
-  transform-origin: top;
-  transition: transform 0.6s cubic-bezier(.68,-0.55,.265,1.55);
+  transition: transform 0.5s ease;
   z-index: 3;
-  box-shadow: 0 0.2em 0.5em rgba(0,0,0,0.2);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
 }
 
-.paper {
+/* Paper */
+.envelope-paper {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 180px;
-  padding: 1em;
-  border-radius: 0.5em;
+  height: 150px;
   background: #fff8dc;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+  border-radius: 0.5em;
+  padding: 1em;
+  box-sizing: border-box;
   font-family: 'Patrick Hand', cursive;
   font-size: 1rem;
   z-index: 2;
   transform: translateY(0); /* hidden behind flap */
-  transition: transform 0.8s ease;
+  transition: transform 0.6s ease;
 }
 
-.paper::after {
+.envelope-paper::after {
   content: "💋 💋 💋";
   position: absolute;
   bottom: 0.2em;
@@ -124,11 +132,9 @@ button:active { transform: scale(0.95);}
   opacity: 0.3;
 }
 
-.paper h3 { margin-top: 0; color: #7c3aed; }
-
+.envelope-paper h3 { margin-top:0; color:#7c3aed; }
 </style>
 </head>
-
 <body>
 
 <div id="startScreen" onclick="startExperience()">Tap anywhere love 💜</div>
@@ -176,21 +182,21 @@ function yesClick() {
     <p>Happy Valentine’s Day, Zee.<br>I choose you. Always :3</p>
     <button id="oneMoreBtn">One more thing… 💌</button>
   `;
-  document.getElementById("oneMoreBtn").addEventListener("click", openEnvelope);
+  document.getElementById("oneMoreBtn").addEventListener("click", showEnvelope);
 }
 
-function openEnvelope() {
+function showEnvelope() {
   const card = document.getElementById("card");
   card.innerHTML = `
     <div class="envelope-container" onclick="toggleEnvelope(this)">
-      <div class="envelope">
-        <div class="paper">
+      <div class="envelope-base">
+        <div class="envelope-paper">
           <h3>To my person</h3>
           <p>
           Hey love, I just wanted to tell you how much you mean to me. Even though we’re miles apart, I feel you with me every day in my thoughts and my heart. Every little thing about you, your voice, your laugh, the way you care, makes me fall for you more and more. I miss you like crazy, and I can’t wait for the day we’re finally together. Until then, just know that no distance can ever change how much I love you. Maybe someday soon, I'll be on a plane, flying through the sky, not just to visit, but to find you, hold you, and finally do the things that we've been dreaming for.. I love you 💖
           </p>
         </div>
-        <div class="flap"></div>
+        <div class="envelope-flap"></div>
       </div>
     </div>
     <p style="margin-top:0.5em;font-size:0.9rem;">(tap the envelope)</p>
@@ -198,16 +204,16 @@ function openEnvelope() {
 }
 
 function toggleEnvelope(container){
-  const flap = container.querySelector('.flap');
-  const paper = container.querySelector('.paper');
+  const flap = container.querySelector('.envelope-flap');
+  const paper = container.querySelector('.envelope-paper');
   const isOpen = flap.dataset.open === 'true';
 
   if(!isOpen){
-    flap.style.transform = 'rotateX(-180deg)';
-    paper.style.transform = 'translateY(-90px)'; // fixed pixel slide
+    flap.style.transform = 'translateY(-75px)'; // flap opens up
+    paper.style.transform = 'translateY(-75px)'; // paper slides up naturally
     flap.dataset.open = 'true';
   } else {
-    flap.style.transform = 'rotateX(0deg)';
+    flap.style.transform = 'translateY(0)';
     paper.style.transform = 'translateY(0)';
     flap.dataset.open = 'false';
   }
@@ -224,5 +230,6 @@ function moveNo(){
   no.style.top = Math.random() * (window.innerHeight - no.offsetHeight - pad*2) + pad + "px";
 }
 </script>
+
 </body>
 </html>
